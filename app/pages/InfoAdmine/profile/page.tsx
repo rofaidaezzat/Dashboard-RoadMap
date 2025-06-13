@@ -23,7 +23,6 @@ interface IUserData extends IAdmineProfileForm {
   _id?: string;
 }
 
-
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<IAdmineProfileForm | null>(null);
   const [userData, setUserData] = useState<IUserData | null>(null); // تم استبدال any
@@ -47,7 +46,7 @@ const Profile = () => {
   // جلب بيانات المستخدم من localStorage فقط في المتصفح
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const userDataString = localStorage.getItem("loggedInUser");
+      const userDataString = window.localStorage.getItem("loggedInUser");
       const userDataObj = userDataString ? JSON.parse(userDataString) : null;
       setUserData(userDataObj);
       if (userDataObj) {
@@ -163,12 +162,12 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-100 flex flex-col items-start justify-center p-0 m-0">
-      <GoBack/>
+      <GoBack />
       <div className="w-full max-w-5xl mx-auto bg-white/70 backdrop-blur-md rounded-3xl shadow-lg p-6 md:p-12 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start">
         {/* الصورة والبيانات */}
         <div className="flex flex-col items-center md:items-start md:w-1/3 gap-4 mb-8 md:mb-0">
           <div className="w-full">
-            <ImageProfile/>
+            <ImageProfile />
           </div>
           <div className="mt-2 text-center md:text-left flex flex-col space-y-6">
             <h1 className="text-2xl font-extrabold text-gray-800 mb-1">

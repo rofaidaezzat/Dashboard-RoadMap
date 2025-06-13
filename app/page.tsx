@@ -7,15 +7,25 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const userDataString = localStorage.getItem("loggedInUser");
-    const userData = userDataString ? JSON.parse(userDataString) : null;
-    const roleUser = localStorage.getItem("role");
-    const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
+    const checkUserData = () => {
+      try {
+        const userDataString = localStorage.getItem("loggedInUser");
+        const userData = userDataString ? JSON.parse(userDataString) : null;
+        const roleUser = localStorage.getItem("role");
+        const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
 
-    if (userData && roleData) {
-      router.push("/pages/pagesofsidebar/Home");
-    } else {
-      router.push("/authpage");
+        if (userData && roleData) {
+          router.push("/pages/pagesofsidebar/Home");
+        } else {
+          router.push("/authpage");
+        }
+      } catch (error) {
+        console.error("Error accessing localStorage:", error);
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      checkUserData();
     }
   }, [router]);
 

@@ -15,7 +15,7 @@ interface IRefreshResponse {
 }
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://faa4-102-189-161-42.ngrok-free.app/',
+  baseUrl: 'https://b684-102-189-220-226.ngrok-free.app/',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;

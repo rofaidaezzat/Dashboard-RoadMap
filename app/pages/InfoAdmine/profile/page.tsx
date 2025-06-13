@@ -45,17 +45,26 @@ const Profile = () => {
 
   // جلب بيانات المستخدم من localStorage فقط في المتصفح
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userDataString = localStorage.getItem("loggedInUser");
-      const userDataObj = userDataString ? JSON.parse(userDataString) : null;
-      setUserData(userDataObj);
-      if (userDataObj) {
-        setUserInfo({
-          first_name: userDataObj.first_name || "",
-          last_name: userDataObj.last_name || "",
-          email: userDataObj.email || "",
-        });
+    const fetchUserData = () => {
+      try {
+        const userDataString = localStorage.getItem("loggedInUser");
+        if (userDataString) {
+          const userDataObj = JSON.parse(userDataString);
+          setUserData(userDataObj);
+          setUserInfo({
+            first_name: userDataObj.first_name || "",
+            last_name: userDataObj.last_name || "",
+            email: userDataObj.email || "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
+    };
+
+    // Only run on client side
+    if (typeof window !== "undefined") {
+      fetchUserData();
     }
   }, []);
 

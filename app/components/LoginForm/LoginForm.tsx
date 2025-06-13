@@ -41,8 +41,7 @@ const LoginForm = () => {
       const { status, data: resData } = await axios.post(
         "https://b684-102-189-220-226.ngrok-free.app/auth/login",
         data,
-        { withCredentials: true }
-      );
+        { withCredentials: true });
       console.log(resData);
       if (status === 200) {
         // Store data in cookies instead of localStorage

@@ -9,8 +9,11 @@ const GoBack = () => {
     const router = useRouter()
 
     const goBack=()=>{
-        router.back()
-
+        if (typeof window !== 'undefined' && window.history.length > 2) {
+            router.back();
+        } else {
+            router.push('/pages/pagesofsidebar/Home');
+        }
     }
     return (
     <button className="button-goback" onClick={goBack}>

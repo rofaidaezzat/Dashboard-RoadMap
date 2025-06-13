@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "./components/Ui/Loading/Loading";
+import Cookies from 'js-cookie';
 
 export default function Home() {
   const router = useRouter();
@@ -9,9 +10,9 @@ export default function Home() {
   useEffect(() => {
     const checkUserData = () => {
       try {
-        const userDataString = localStorage.getItem("loggedInUser");
+        const userDataString = Cookies.get("loggedInUser");
         const userData = userDataString ? JSON.parse(userDataString) : null;
-        const roleUser = localStorage.getItem("role");
+        const roleUser = Cookies.get("role");
         const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
 
         if (userData && roleData) {
@@ -20,13 +21,12 @@ export default function Home() {
           router.push("/authpage");
         }
       } catch (error) {
-        console.error("Error accessing localStorage:", error);
+        console.error("Error accessing cookies:", error);
+        router.push("/authpage");
       }
     };
 
-    if (typeof window !== "undefined") {
-      checkUserData();
-    }
+    checkUserData();
   }, [router]);
 
   return (

@@ -3,9 +3,9 @@
 const nextConfig = {
   images: {
     domains: [
-      'd378-105-197-134-227.ngrok-free.app',
+
       'ui-avatars.com',
-      'eb90-102-189-197-60.ngrok-free.app',
+      'b684-102-189-220-226.ngrok-free.app',
     ],
   },
 };

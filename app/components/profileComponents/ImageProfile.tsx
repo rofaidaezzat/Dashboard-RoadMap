@@ -8,6 +8,7 @@ import {
   useDeleteImageProfileMutation,
   useUploadImageProfileMutation,
 } from "@/app/redux/services/crudProfile";
+import Cookies from 'js-cookie';
 
 interface IUser {
   profile_image: string;
@@ -15,7 +16,7 @@ interface IUser {
 
 const ImageProfile = () => {
   // states
-  const userDataString = localStorage.getItem("loggedInUser");
+  const userDataString = Cookies.get("loggedInUser");
   const userData = userDataString ? JSON.parse(userDataString) : null;
   const [uploadImage, { isSuccess, isLoading: isLoadingUploadImage }] =
     useUploadImageProfileMutation();
@@ -24,7 +25,7 @@ const ImageProfile = () => {
     DeleteImage,
     { isSuccess: isSuccessDelete, isLoading: isLoadingDelete },
   ] = useDeleteImageProfileMutation();
-  const IdUser = userData.id;
+  const IdUser = userData?.id;
 
   const getUserById = async (): Promise<IUser> => {
     if (!IdUser) throw new Error("No User ID Provided");
@@ -45,7 +46,7 @@ const ImageProfile = () => {
 
   const deleteImage = () => {
     DeleteImage({});
-    localStorage.removeItem("profileImage");
+    Cookies.remove("profileImage");
     setOpenMenu(false);
   };
 

@@ -12,6 +12,7 @@ import InputErrorMessage from "../Ui/inputErrorMsg";
 import Button from "../Ui/Button";
 import { useDispatch } from "react-redux";
 import { AccessTokenAction } from "@/app/redux/features/accessTokenSlice";
+import Cookies from 'js-cookie';
 
 interface IFormInput {
   email: string;
@@ -44,21 +45,22 @@ const LoginForm = () => {
       );
       console.log(resData);
       if (status === 200) {
-        //set accesstoken
-        localStorage.setItem("loggedInUser", JSON.stringify(resData));
-        localStorage.setItem("First-name", JSON.stringify(resData.first_name));
-        localStorage.setItem("last-name", JSON.stringify(resData.last_name));
-        localStorage.setItem("email", JSON.stringify(resData.email));
-        localStorage.setItem("role", JSON.stringify(resData.role));
-        localStorage.setItem("id", JSON.stringify(resData.id));
-        const accessToken = resData.accessToken;
-        localStorage.setItem("accessToken", accessToken);
+        // Store data in cookies instead of localStorage
+        Cookies.set("loggedInUser", JSON.stringify(resData), { expires: 7 });
+        Cookies.set("First-name", JSON.stringify(resData.first_name), { expires: 7 });
+        Cookies.set("last-name", JSON.stringify(resData.last_name), { expires: 7 });
+        Cookies.set("email", JSON.stringify(resData.email), { expires: 7 });
+        Cookies.set("role", JSON.stringify(resData.role), { expires: 7 });
+        Cookies.set("id", JSON.stringify(resData.id), { expires: 7 });
+        Cookies.set("accessToken", resData.accessToken, { expires: 7 });
+
         Dispatch(AccessTokenAction(resData.accessToken));
-        const roleUser = localStorage.getItem("role");
+        
+        const roleUser = Cookies.get("role");
         const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
 
         if (roleData) {
-          toast.success("You will navigate to the home page after 1 seconds", {
+          toast.success("You will navigate to the dashboard after 1 seconds", {
             position: "bottom-center",
             duration: 3000,
             style: {
@@ -68,7 +70,7 @@ const LoginForm = () => {
             },
           });
           setTimeout(() => {
-            location.replace("/");
+            location.replace("/pages/pagesofsidebar/Home");
           }, 2000);
         } else {
           toast.error("The user must be admin", {

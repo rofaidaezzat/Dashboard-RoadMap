@@ -9,6 +9,7 @@ declare global {
 
 import axios from "axios";
 import { refreshAccessToken } from "../services/authService";
+import Cookies from 'js-cookie';
 
 export const axiosInstance = axios.create({
     baseURL: "https://b684-102-189-220-226.ngrok-free.app/", 
@@ -16,67 +17,55 @@ export const axiosInstance = axios.create({
     timeout: 10000, 
 });
 
-const getAccessToken = () => {
-    if (typeof window !== "undefined") {
-        return localStorage.getItem("accessToken");
-    }
-    return null;
-};
-
-const clearAuthData = () => {
-    if (typeof window !== "undefined") {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("loggedInUser");
-    }
-};
-
 axiosInstance.interceptors.request.use(
-    (config) => {
+    async (config) => {
         const noAuthEndpoints = ["/auth/login", "/auth/refresh", "/auth/register"];
         if (noAuthEndpoints.some((url) => config.url?.includes(url))) {
-            return config; 
+        return config; 
         }
 
-        const token = getAccessToken();
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+    const token = Cookies.get("accessToken");
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
         }
 
         return config; 
     },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+    (error) => Promise.reject(error) 
+    );
 
-axiosInstance.interceptors.response.use(
-    (response) => response, 
-    async (error) => {
-        const originalRequest = error.config; 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+    axiosInstance.interceptors.response.use(
+        (response) => response, 
+        async (error) => {
+            const originalRequest = error.config; 
+            if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true; 
     
             try {
-                const newToken = await refreshAccessToken();
+            const newToken = await refreshAccessToken();
     
-                if (newToken) {
-                    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                    return axiosInstance(originalRequest);
+            if (newToken) {
+                axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return axiosInstance(originalRequest);
                 }
             } catch (err) {
-                console.log(err);
-                clearAuthData();
+  console.log(err);
+  if (typeof window !== "undefined") {
+    Cookies.remove("accessToken");
+    Cookies.remove("loggedInUser");
 
-                // Prevent multiple redirects using window._isLoggingOut
-                if (!window._isLoggingOut) {
-                    window._isLoggingOut = true;
-                    window.location.href = "/authpage";
-                    return new Promise(() => {}); // Halt further processing
-                }
-            }
-        }
-        return Promise.reject(error); 
+    // Prevent multiple redirects using window._isLoggingOut
+    if (!window._isLoggingOut) {
+      window._isLoggingOut = true;
+      window.location.href = "/authpage";
+      return new Promise(() => {}); // Halt further processing
     }
-);
+  }
+}
+            }
+            return Promise.reject(error); 
+        }
+        );
 

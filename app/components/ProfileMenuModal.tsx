@@ -3,6 +3,7 @@ import { axiosInstance } from "../config/axios.config";
 import { CircleUserRound } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { clearAccessToken } from "../redux/features/accessTokenSlice";
+import Cookies from 'js-cookie';
 
 type IProfileMenuModalProps = {
   isOpen: boolean;
@@ -17,16 +18,26 @@ const ProfileMenuModal = ({ isOpen, onClose }: IProfileMenuModalProps) => {
   const onLogout = async () => {
     try {
       await axiosInstance.post("/auth/logout");
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("accessToken");
+      Cookies.remove("loggedInUser");
+      Cookies.remove("accessToken");
+      Cookies.remove("First-name");
+      Cookies.remove("last-name");
+      Cookies.remove("email");
+      Cookies.remove("role");
+      Cookies.remove("id");
       dispatch(clearAccessToken());
       setTimeout(() => {
         location.replace("/");
       }, 1500);
     } catch (err) {
       console.error("Logout failed", err);
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("accessToken");
+      Cookies.remove("loggedInUser");
+      Cookies.remove("accessToken");
+      Cookies.remove("First-name");
+      Cookies.remove("last-name");
+      Cookies.remove("email");
+      Cookies.remove("role");
+      Cookies.remove("id");
       location.replace("/authpage");
       dispatch(clearAccessToken());
     }

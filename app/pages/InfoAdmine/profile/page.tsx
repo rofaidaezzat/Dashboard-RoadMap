@@ -45,17 +45,15 @@ const Profile = () => {
 
   // جلب بيانات المستخدم من localStorage فقط في المتصفح
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userDataString = window.localStorage.getItem("loggedInUser");
-      const userDataObj = userDataString ? JSON.parse(userDataString) : null;
-      setUserData(userDataObj);
-      if (userDataObj) {
-        setUserInfo({
-          first_name: userDataObj.first_name || "",
-          last_name: userDataObj.last_name || "",
-          email: userDataObj.email || "",
-        });
-      }
+    const userDataString = localStorage.getItem("loggedInUser");
+    const userDataObj = userDataString ? JSON.parse(userDataString) : null;
+    setUserData(userDataObj);
+    if (userDataObj) {
+      setUserInfo({
+        first_name: userDataObj.first_name || "",
+        last_name: userDataObj.last_name || "",
+        email: userDataObj.email || "",
+      });
     }
   }, []);
 

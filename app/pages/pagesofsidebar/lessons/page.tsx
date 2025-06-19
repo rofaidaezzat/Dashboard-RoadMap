@@ -21,6 +21,8 @@ import { useQuery } from "@tanstack/react-query";
 import { PiChalkboardTeacherBold } from "react-icons/pi";
 import Spinner from "@/app/components/Ui/LoadingSpinner";
 import HeaderOfPages from "@/app/components/HeaderOfPages";
+import Paginator from "@/app/components/Paginator/Paginator";
+
 interface StatsData {
   lessons: number;
 }
@@ -42,6 +44,14 @@ const Lessonpage = () => {
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const Dispatch = useDispatch();
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil((data?.length || 0) / pageSize) || 1;
+  const paginatedLessons = data?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ) || [];
+
   // ---------------Toast for Delete-------------------
   useEffect(() => {
     if (isSuccess) {
@@ -121,8 +131,8 @@ const Lessonpage = () => {
           "Link",
         ]}
       >
-        {filteredLesson?.length ? (
-          filteredLesson.map(
+        {paginatedLessons.length ? (
+          paginatedLessons.map(
             ({ _id, title, description, roadmap, stage, category, link }) => (
               <tr key={_id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
@@ -188,6 +198,14 @@ const Lessonpage = () => {
           </tr>
         )}
       </Table>
+      <Paginator
+        page={currentPage}
+        pageCount={totalPages}
+        total={data?.length || 0}
+        isLoading={isLoading}
+        onClickPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onClickNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
       {/* ------------Delete Modal--------------- */}
       {isOpenDeleteModel && (
         <DeleteModal

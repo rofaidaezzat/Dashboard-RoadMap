@@ -12,6 +12,7 @@ import Table from "@/app/components/Table";
 import DeleteModal from "@/app/components/Ui/DeleteModal";
 import Spinner from "@/app/components/Ui/LoadingSpinner";
 import UpdateTask from "@/app/components/Ui/TaskModal/UpdateTask";
+import Paginator from "@/app/components/Paginator/Paginator";
 
 import { axiosInstance } from "@/app/config/axios.config";
 import { clickedIdAction } from "@/app/redux/features/clickedIdSlice";
@@ -34,6 +35,8 @@ const Taskpage = () => {
     title: string;
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { ClickedId } = useSelector((state: RootState) => state.clickedId);
   const Dispatch = useDispatch();
@@ -75,6 +78,12 @@ const Taskpage = () => {
   const filteredTask = data?.filter((task) =>
     task.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const totalPages = Math.ceil((filteredTask?.length || 0) / pageSize) || 1;
+  const paginatedTasks = filteredTask?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ) || [];
 
   return (
     <div className="flex flex-col gap-5 mt-20 mx-7">
@@ -118,8 +127,8 @@ const Taskpage = () => {
 
       {/* Table Section */}
       <Table header={["_id", "Title", "Description", "Status"]}>
-        {filteredTask?.length ? (
-          filteredTask.map(({ _id, title, description, status }) => (
+        {paginatedTasks.length ? (
+          paginatedTasks.map(({ _id, title, description, status }) => (
             <tr key={_id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                 {_id}
@@ -205,6 +214,15 @@ const Taskpage = () => {
           </button>
         </DeleteModal>
       )}
+
+      <Paginator
+        page={currentPage}
+        pageCount={totalPages}
+        total={filteredTask?.length || 0}
+        isLoading={isLoading}
+        onClickPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onClickNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
     </div>
   );
 };

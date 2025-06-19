@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MdCategory } from "react-icons/md";
 import Spinner from "@/app/components/Ui/LoadingSpinner";
 import HeaderOfPages from "@/app/components/HeaderOfPages";
+import Paginator from "@/app/components/Paginator/Paginator";
 
 
 interface StatsData {
@@ -41,6 +42,13 @@ const CategoryPage = () => {
     title: string;
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil((data?.length || 0) / pageSize) || 1;
+  const paginatedCategory = data?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ) || [];
   // ----------------Toast for Delete----------------
   useEffect(() => {
     if (isSuccess) {
@@ -112,8 +120,8 @@ const CategoryPage = () => {
 
       {/* -----------------table--------------------------- */}
       <Table header={["id", "title", "roadmap", "stage"]}>
-        {filteredCategory?.length ? (
-          filteredCategory?.map(({ _id, title, roadmap, stage }) => (
+        {paginatedCategory.length ? (
+          paginatedCategory.map(({ _id, title, roadmap, stage }) => (
             <tr key={_id}>
               
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
@@ -171,6 +179,14 @@ const CategoryPage = () => {
           </tr>
         )}
       </Table>
+      <Paginator
+        page={currentPage}
+        pageCount={totalPages}
+        total={filteredCategory?.length || 0}
+        isLoading={isLoading}
+        onClickPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onClickNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
       {/* ------------Delete Modal--------------- */}
       {isOpenDeleteModel && (
         <DeleteModal

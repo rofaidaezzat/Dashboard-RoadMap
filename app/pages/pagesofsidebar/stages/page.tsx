@@ -21,6 +21,8 @@ import { useQuery } from "@tanstack/react-query";
 import { FaLayerGroup } from "react-icons/fa";
 import Spinner from "@/app/components/Ui/LoadingSpinner";
 import HeaderOfPages from "@/app/components/HeaderOfPages";
+import Paginator from "@/app/components/Paginator/Paginator";
+
 interface StatsData {
   stages: number;
 }
@@ -39,6 +41,14 @@ const Coursepage = () => {
   const [destroyStage, { isLoading: isLoadingDestroy, isSuccess }] =
     useDeleteDashboardStagesMutation();
   const [searchTerm, setSearchTerm] = useState("");
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil((data?.length || 0) / pageSize) || 1;
+  const paginatedStages = data?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ) || [];
+
   //  --------------------------Toast for delete Track-------------
   useEffect(() => {
     if (isSuccess) {
@@ -108,8 +118,8 @@ const Coursepage = () => {
       </HeaderOfPages>
       {/* ----------------table--------------------------- */}
       <Table header={["id", "title", "order", "roadmap"]}>
-        {filteredStage?.length ? (
-          filteredStage?.map(({ _id, order, roadmap, title }) => (
+        {paginatedStages.length ? (
+          paginatedStages.map(({ _id, order, roadmap, title }) => (
             <tr key={_id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                 {_id}
@@ -165,6 +175,14 @@ const Coursepage = () => {
           </tr>
         )}
       </Table>
+      <Paginator
+        page={currentPage}
+        pageCount={totalPages}
+        total={data?.length || 0}
+        isLoading={isLoading}
+        onClickPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onClickNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
       {/* Modals */}
       {isOpenCreateModel && (
         <CreateNewStages

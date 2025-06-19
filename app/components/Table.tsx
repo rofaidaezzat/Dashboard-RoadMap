@@ -8,10 +8,13 @@ interface Iprops {
 const Table = ({ header, children }: Iprops) => {
   return (
     <div className="flex flex-col shadow-xl">
-      <div className="-m-1.5 overflow-x-auto">
-        <div className="p-1.5 min-w-full inline-block align-middle">
-          <div className="border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-300">
+      <div className="overflow-x-auto w-full">
+        <div className="p-1.5 max-w-[1200px] mx-auto">
+          <div className="border border-gray-200 rounded-xl shadow-sm overflow-x-auto" style={{ maxWidth: "1200px" }}>
+            <table
+              className="min-w-[1100px] max-w-none divide-y divide-gray-300"
+              style={{ minWidth: "1100px" }}
+            >
               <thead className="bg-gray-100">
                 <tr>
                   {header.map((head, idx) => (

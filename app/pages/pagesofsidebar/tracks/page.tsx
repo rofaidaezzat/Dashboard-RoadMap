@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/app/config/axios.config";
 import Spinner from "@/app/components/Ui/LoadingSpinner";
 import HeaderOfPages from "@/app/components/HeaderOfPages";
+import Paginator from "@/app/components/Paginator/Paginator";
 
 interface StatsData {
   roadmaps: number;
@@ -43,6 +44,14 @@ const Trackpage = () => {
   const [DestroyTrack, { isLoading: isLoadingDelete, isSuccess }] =
     useDeleteDashboardTracksMutation();
   const [searchTerm, setSearchTerm] = useState("");
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil((data?.length || 0) / pageSize) || 1;
+  const paginatedTracks = data?.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ) || [];
+
   // --------------------------Toast for delete Track-------------
   useEffect(() => {
     if (isSuccess) {
@@ -120,8 +129,8 @@ const Trackpage = () => {
           "Number Of Users",
         ]}
       >
-        {filteredTracks?.length ? (
-          filteredTracks.map(
+        {paginatedTracks.length ? (
+          paginatedTracks.map(
             ({
               _id,
               requirments,
@@ -195,6 +204,14 @@ const Trackpage = () => {
           </tr>
         )}
       </Table>
+      <Paginator
+        page={currentPage}
+        pageCount={totalPages}
+        total={filteredTracks?.length || 0}
+        isLoading={isLoading}
+        onClickPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        onClickNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+      />
       {/* ---------------------Create Modal---------------- */}
       {isOpenCreateeModel && (
         <CreateNewTrack

@@ -8,7 +8,7 @@ import {
   useDeleteImageProfileMutation,
   useUploadImageProfileMutation,
 } from "@/app/redux/services/crudProfile";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface IUser {
   profile_image: string;

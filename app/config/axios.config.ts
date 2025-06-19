@@ -14,7 +14,7 @@ import Cookies from 'js-cookie';
 export const axiosInstance = axios.create({
     baseURL: "https://b684-102-189-220-226.ngrok-free.app/", 
     withCredentials: true, 
-    timeout: 10000, 
+    timeout: 20000, 
 });
 
 axiosInstance.interceptors.request.use(

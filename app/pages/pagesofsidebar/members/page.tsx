@@ -140,9 +140,7 @@ const Memberpage = () => {
               <Plus size={18} />
               Add new member
             </Button>
-            <Button className="bg-gray-100 text-gray-700 rounded-xl py-2 px-4 shadow hover:bg-gray-200 transition">
-              Manage permissions
-            </Button>
+            
           </div>
         ) : (
           <div className="flex justify-end gap-4 mt-2 mb-4 relative z-10">

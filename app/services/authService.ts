@@ -56,9 +56,9 @@ export const refreshAccessToken = async (): Promise<string | null> => {
     const response = await axiosInstance.get("/auth/refresh");
     const newAccessToken = response.data.accessToken;
 
-    // Use localStorage only in the browser
+    // Store the new token in cookies instead of localStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("accessToken", newAccessToken);
+      Cookies.set("accessToken", newAccessToken, { expires: 7 });
     }
 
     return newAccessToken;

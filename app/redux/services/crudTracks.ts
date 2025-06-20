@@ -49,10 +49,18 @@ interface IEdite{
 }
 
 interface Icreate {
-    title:string,
-    requirments:string,
-    target_audience:string
-    
+    title: string;
+    requirments: string;
+    target_audience: string;
+    header: { title: string; subTitle: string }[];
+    description: string;
+    core_languages: { name: string; icon: string }[];
+    popular_frameworks: { name: string; icon: string }[];
+    development_tools: { name: string; icon: string }[];
+    career_opportunities: string;
+    advanced_topics: string;
+    project_based_learning: string;
+    testimonials: string;
 }
 
 export type ITracksResponse =ITracks[];

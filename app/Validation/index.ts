@@ -16,19 +16,60 @@ export const loginSchema = yup
 
 
 export const CreateTrackSchema = yup.object({
-    title: yup
-      .string()
-      .required("Title is required")
-      .min(3, "Title should be at least 3 characters."),
-    requirments: yup
-      .string()
-      .required("Requirments is required")
-      .min(6, "Requirments should be at least 6 characters."),
-    target_audience: yup
-      .string()
-      .required("Target audience is required")
-      .min(3, "Target audience should be at least 3 characters."),
-  });
+  title: yup
+    .string()
+    .required("Title is required")
+    .min(3, "Title should be at least 3 characters."),
+  requirments: yup
+    .string()
+    .required("Requirments is required")
+    .min(6, "Requirments should be at least 6 characters."),
+  target_audience: yup
+    .string()
+    .required("Target audience is required")
+    .min(3, "Target audience should be at least 3 characters."),
+  header: yup
+    .array()
+    .of(
+      yup.object({
+        title: yup.string().required("Header title is required"),
+        subTitle: yup.string().required("SubTitle is required"),
+      })
+    )
+    .min(1, "At least one header is required"),
+  description: yup.string().required("Description is required"),
+  core_languages: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string().required("Language name is required"),
+        icon: yup.string().required("Language icon is required"),
+      })
+    )
+    .min(1, "At least one language is required"),
+  popular_frameworks: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string().required("Framework name is required"),
+        icon: yup.string().required("Framework icon is required"),
+      })
+    )
+    .min(1, "At least one framework is required"),
+  development_tools: yup
+    .array()
+    .of(
+      yup.object({
+        name: yup.string().required("Tool name is required"),
+        icon: yup.string().required("Tool icon is required"),
+      })
+    )
+    .min(1, "At least one tool is required"),
+  career_opportunities: yup.string().required("Career Opportunities is required"),
+  advanced_topics: yup.string().required("Advanced Topics is required"),
+  project_based_learning: yup.string().required("Project-Based Learning is required"),
+  testimonials: yup.string().required("Testimonials is required"),
+});
 export const UpdateTrackSchema = yup
     .object({
     title: yup

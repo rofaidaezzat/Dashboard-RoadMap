@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FiAlertCircle } from "react-icons/fi";
 import "./StyleForm.css";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useFieldArray, Path } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import InputErrorMessage from "@/app/components/Ui/inputErrorMsg";
@@ -21,6 +21,15 @@ interface ICreateFormInput {
   title: string;
   requirments: string;
   target_audience: string;
+  header: { title: string; subTitle: string }[];
+  description: string;
+  core_languages: { name: string; icon: string }[];
+  popular_frameworks: { name: string; icon: string }[];
+  development_tools: { name: string; icon: string }[];
+  career_opportunities: string;
+  advanced_topics: string;
+  project_based_learning: string;
+  testimonials: string;
 }
 
 const CreateNewTrack = ({ isOpen, setIsOpen }: Iprops) => {
@@ -30,18 +39,39 @@ const CreateNewTrack = ({ isOpen, setIsOpen }: Iprops) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<ICreateFormInput>({
-    resolver: yupResolver(CreateTrackSchema),
+    resolver: yupResolver(CreateTrackSchema) as any,
+    defaultValues: {
+      header: [{ title: "", subTitle: "" }],
+      core_languages: [{ name: "", icon: "" }],
+      popular_frameworks: [{ name: "", icon: "" }],
+      development_tools: [{ name: "", icon: "" }],
+      description: "",
+      career_opportunities: "",
+      advanced_topics: "",
+      project_based_learning: "",
+      testimonials: "",
+      title: "",
+      requirments: "",
+      target_audience: "",
+    },
   });
+
+  const headerArray = useFieldArray({ control, name: "header" });
+  const coreLanguagesArray = useFieldArray({ control, name: "core_languages" });
+  const frameworksArray = useFieldArray({
+    control,
+    name: "popular_frameworks",
+  });
+  const toolsArray = useFieldArray({ control, name: "development_tools" });
 
   //Handlers
   const onSubmit: SubmitHandler<ICreateFormInput> = (data) => {
     CreateTrack({
       body: {
-        title: data.title,
-        requirments: data.requirments,
-        target_audience: data.target_audience,
+        ...data,
       },
     });
   };
@@ -72,10 +102,12 @@ const CreateNewTrack = ({ isOpen, setIsOpen }: Iprops) => {
         placeholder={input.placeholder}
         className="input-member flex-1"
         type={input.type}
-        {...register(input.name, input.validation)}
+        {...register(input.name as Path<ICreateFormInput>)}
       />
-      {errors[input.name] && (
-        <InputErrorMessage msg={errors[input.name]?.message} />
+      {errors[input.name as keyof ICreateFormInput] && (
+        <InputErrorMessage
+          msg={errors[input.name as keyof ICreateFormInput]?.message}
+        />
       )}
     </div>
   ));
@@ -95,15 +127,228 @@ const CreateNewTrack = ({ isOpen, setIsOpen }: Iprops) => {
             animate={{ scale: 1, rotate: "0deg" }}
             exit={{ scale: 0, rotate: "0deg" }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-gradient-to-br from-violet-600 to-indigo-600 text-white p-6 rounded-lg w-full max-w-lg shadow-xl cursor-default relative overflow-hidden"
+            className="bg-gradient-to-br from-violet-600 to-indigo-600 text-white p-6 rounded-lg w-full max-w-3xl shadow-xl cursor-default relative flex flex-col max-h-[90vh]"
           >
             <FiAlertCircle className="text-white/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24" />
-            <div className="relative z-10">
+            <div className="relative z-10 overflow-y-auto pr-2">
               <h3 className="text-3xl font-bold text-center mb-2">
                 Create Track
               </h3>
               <form onSubmit={handleSubmit(onSubmit)} className="form-member">
                 {renderCreateFrom}
+
+                {/* Core Languages */}
+                <div className="mb-4">
+                  <label className="block font-bold mb-1">Core Languages</label>
+                  {coreLanguagesArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex gap-2 mb-2">
+                      <input
+                        {...register(
+                          `core_languages.${index}.name` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Name"
+                        className="input-member"
+                      />
+                      <input
+                        {...register(
+                          `core_languages.${index}.icon` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Icon"
+                        className="input-member"
+                      />
+                      {errors.core_languages?.[index]?.name && (
+                        <InputErrorMessage
+                          msg={errors.core_languages?.[index]?.name?.message}
+                        />
+                      )}
+                      {errors.core_languages?.[index]?.icon && (
+                        <InputErrorMessage
+                          msg={errors.core_languages?.[index]?.icon?.message}
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => coreLanguagesArray.remove(index)}
+                        disabled={coreLanguagesArray.fields.length === 1}
+                        style={{
+                          opacity:
+                            coreLanguagesArray.fields.length === 1 ? 0.5 : 1,
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      coreLanguagesArray.append({ name: "", icon: "" })
+                    }
+                  >
+                    Add Core
+                  </button>
+                </div>
+
+                {/* Popular Frameworks */}
+                <div className="mb-4">
+                  <label className="block font-bold mb-1">
+                    Popular Frameworks
+                  </label>
+                  {frameworksArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex gap-2 mb-2">
+                      <input
+                        {...register(
+                          `popular_frameworks.${index}.name` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Name"
+                        className="input-member"
+                      />
+                      <input
+                        {...register(
+                          `popular_frameworks.${index}.icon` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Icon"
+                        className="input-member"
+                      />
+                      {errors.popular_frameworks?.[index]?.name && (
+                        <InputErrorMessage
+                          msg={
+                            errors.popular_frameworks?.[index]?.name?.message
+                          }
+                        />
+                      )}
+                      {errors.popular_frameworks?.[index]?.icon && (
+                        <InputErrorMessage
+                          msg={
+                            errors.popular_frameworks?.[index]?.icon?.message
+                          }
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => frameworksArray.remove(index)}
+                        disabled={frameworksArray.fields.length === 1}
+                        style={{
+                          opacity:
+                            frameworksArray.fields.length === 1 ? 0.5 : 1,
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      frameworksArray.append({ name: "", icon: "" })
+                    }
+                  >
+                    Add Framework
+                  </button>
+                </div>
+
+                {/* Development Tools */}
+                <div className="mb-4">
+                  <label className="block font-bold mb-1">
+                    Development Tools
+                  </label>
+                  {toolsArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex gap-2 mb-2">
+                      <input
+                        {...register(
+                          `development_tools.${index}.name` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Name"
+                        className="input-member"
+                      />
+                      <input
+                        {...register(
+                          `development_tools.${index}.icon` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Icon"
+                        className="input-member"
+                      />
+                      {errors.development_tools?.[index]?.name && (
+                        <InputErrorMessage
+                          msg={errors.development_tools?.[index]?.name?.message}
+                        />
+                      )}
+                      {errors.development_tools?.[index]?.icon && (
+                        <InputErrorMessage
+                          msg={errors.development_tools?.[index]?.icon?.message}
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => toolsArray.remove(index)}
+                        disabled={toolsArray.fields.length === 1}
+                        style={{
+                          opacity: toolsArray.fields.length === 1 ? 0.5 : 1,
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => toolsArray.append({ name: "", icon: "" })}
+                  >
+                    Add Tool
+                  </button>
+                </div>
+
+                {/* Header */}
+                <div className="mb-4">
+                  <label className="block font-bold mb-1">Header</label>
+                  {headerArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex gap-2 mb-2">
+                      <input
+                        {...register(
+                          `header.${index}.title` as Path<ICreateFormInput>
+                        )}
+                        placeholder="Title"
+                        className="input-member"
+                      />
+                      <input
+                        {...register(
+                          `header.${index}.subTitle` as Path<ICreateFormInput>
+                        )}
+                        placeholder="SubTitle"
+                        className="input-member"
+                      />
+                      {errors.header?.[index]?.title && (
+                        <InputErrorMessage
+                          msg={errors.header?.[index]?.title?.message}
+                        />
+                      )}
+                      {errors.header?.[index]?.subTitle && (
+                        <InputErrorMessage
+                          msg={errors.header?.[index]?.subTitle?.message}
+                        />
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => headerArray.remove(index)}
+                        disabled={headerArray.fields.length === 1}
+                        style={{
+                          opacity: headerArray.fields.length === 1 ? 0.5 : 1,
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      headerArray.append({ title: "", subTitle: "" })
+                    }
+                  >
+                    Add Header
+                  </button>
+                </div>
+
                 <div className="flex gap-2">
                   <button
                     onClick={() => setIsOpen(false)}

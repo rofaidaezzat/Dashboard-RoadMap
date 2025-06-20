@@ -33,8 +33,8 @@ export interface IUpdateMemberForm {
 }
 
 export interface ICreateTrackFormInput {
-    name: "title" | "requirments"|"target_audience";
-    Label:"Title"|"Requirments"|"Target_Audience"|"image"
+    name: "title" | "requirments" | "target_audience" | "description" | "career_opportunities" | "advanced_topics" | "project_based_learning" | "testimonials";
+    Label: string;
     placeholder: string;
     type: string;
     validation: {

@@ -54,7 +54,56 @@ export const LOGIN_FORM: ILoginInput[] = [
             minLength: 1,
             },
         },
-        
+        {
+            name: "description",
+            Label: "Description",
+            placeholder: "Description",
+            type: "text",
+            validation: {
+                required: true,
+                minLength: 6,
+            },
+        },
+        {
+            name: "career_opportunities",
+            Label: "Career Opportunities",
+            placeholder: "Career Opportunities",
+            type: "text",
+            validation: {
+                required: true,
+                minLength: 6,
+            },
+        },
+        {
+            name: "advanced_topics",
+            Label: "Advanced Topics",
+            placeholder: "Advanced Topics",
+            type: "text",
+            validation: {
+                required: true,
+                minLength: 6,
+            },
+        },
+        {
+            name: "project_based_learning",
+            Label: "Project-Based Learning",
+            placeholder: "Project-Based Learning",
+            type: "text",
+            validation: {
+                required: true,
+                minLength: 6,
+            },
+        },
+        {
+            name: "testimonials",
+            Label: "Testimonials",
+            placeholder: "Testimonials",
+            type: "text",
+            validation: {
+                required: true,
+                minLength: 6,
+            },
+        },
         ];
 
 

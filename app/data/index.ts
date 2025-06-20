@@ -54,6 +54,7 @@ export const LOGIN_FORM: ILoginInput[] = [
             minLength: 1,
             },
         },
+        
         ];
 
 

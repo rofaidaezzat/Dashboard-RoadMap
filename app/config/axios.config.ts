@@ -12,7 +12,7 @@ import { refreshAccessToken } from "../services/authService";
 import Cookies from 'js-cookie';
 
 export const axiosInstance = axios.create({
-    baseURL: "https://b684-102-189-220-226.ngrok-free.app/", 
+    baseURL: "https://codemap-wgjw.onrender.com/", 
     withCredentials: true, 
     timeout: 20000, 
 });

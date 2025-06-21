@@ -15,7 +15,7 @@ interface IRefreshResponse {
 }
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://b684-102-189-220-226.ngrok-free.app/',
+  baseUrl: 'https://codemap-wgjw.onrender.com/',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;

@@ -12,7 +12,7 @@ import InputErrorMessage from "../Ui/inputErrorMsg";
 import Button from "../Ui/Button";
 import { useDispatch } from "react-redux";
 import { AccessTokenAction } from "@/app/redux/features/accessTokenSlice";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface IFormInput {
   email: string;
@@ -39,22 +39,27 @@ const LoginForm = () => {
     // Fullfiled
     try {
       const { status, data: resData } = await axios.post(
-        "https://b684-102-189-220-226.ngrok-free.app/auth/login",
+        "https://codemap-wgjw.onrender.com/auth/login",
         data,
-        { withCredentials: true });
+        { withCredentials: true }
+      );
       console.log(resData);
       if (status === 200) {
         // Store data in cookies instead of localStorage
         Cookies.set("loggedInUser", JSON.stringify(resData), { expires: 7 });
-        Cookies.set("First-name", JSON.stringify(resData.first_name), { expires: 7 });
-        Cookies.set("last-name", JSON.stringify(resData.last_name), { expires: 7 });
+        Cookies.set("First-name", JSON.stringify(resData.first_name), {
+          expires: 7,
+        });
+        Cookies.set("last-name", JSON.stringify(resData.last_name), {
+          expires: 7,
+        });
         Cookies.set("email", JSON.stringify(resData.email), { expires: 7 });
         Cookies.set("role", JSON.stringify(resData.role), { expires: 7 });
         Cookies.set("id", JSON.stringify(resData.id), { expires: 7 });
         Cookies.set("accessToken", resData.accessToken, { expires: 7 });
 
         Dispatch(AccessTokenAction(resData.accessToken));
-        
+
         const roleUser = Cookies.get("role");
         const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
 

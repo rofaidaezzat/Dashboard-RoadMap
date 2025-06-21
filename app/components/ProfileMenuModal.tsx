@@ -75,7 +75,7 @@ const ProfileMenuModal = ({ isOpen, onClose }: IProfileMenuModalProps) => {
         >
           {data?.profile_image ? (
             <Image
-              imageurl={`https://b684-102-189-220-226.ngrok-free.app/${data.profile_image.replace(
+              imageurl={`https://codemap-wgjw.onrender.com/${data.profile_image.replace(
                 /\\/g,
                 "/"
               )}`}

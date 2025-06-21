@@ -66,7 +66,7 @@ const Sidebar = () => {
         />
         <Option
           Icon={AiOutlineCheckCircle}
-          title="tasks"
+          title="Tasks"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -74,7 +74,7 @@ const Sidebar = () => {
         />
         <Option
           Icon={MdEmail}
-          title="Contactus"
+          title="Contact Us"
           selected={selected}
           setSelected={setSelected}
           open={open}

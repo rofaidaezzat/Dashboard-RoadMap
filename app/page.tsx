@@ -9,6 +9,10 @@ export default function Home() {
 
   useEffect(() => {
     Cookies.remove("accessToken");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("persist:accessToken");
+    }
     router.push("/authpage");
   }, [router]);
 

@@ -10,7 +10,22 @@ export default function Home() {
   useEffect(() => {
     const token = Cookies.get("accessToken");
     if (token) {
-      router.push("/pages/InfoAdmine/profile");
+      // تحقق من صلاحية التوكن عبر API (يجب أن يكون لديك endpoint مناسب)
+      fetch("/api/validate-token", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => {
+          if (res.ok) {
+            router.push("/pages/InfoAdmine/profile");
+          } else {
+            Cookies.remove("accessToken");
+            router.push("/authpage");
+          }
+        })
+        .catch(() => {
+          Cookies.remove("accessToken");
+          router.push("/authpage");
+        });
     } else {
       router.push("/authpage");
     }

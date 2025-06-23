@@ -8,25 +8,12 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkUserData = () => {
-      try {
-        const userDataString = Cookies.get("loggedInUser");
-        const userData = userDataString ? JSON.parse(userDataString) : null;
-        const roleUser = Cookies.get("role");
-        const roleData = roleUser ? JSON.parse(roleUser) === "admin" : null;
-
-        if (userData && roleData) {
-          router.push("/pages/pagesofsidebar/Home");
-        } else {
-          router.push("/authpage");
-        }
-      } catch (error) {
-        console.error("Error accessing cookies:", error);
-        router.push("/authpage");
-      }
-    };
-
-    checkUserData();
+    const token = Cookies.get("accessToken");
+    if (token) {
+      router.push("/pages/InfoAdmine/profile");
+    } else {
+      router.push("/authpage");
+    }
   }, [router]);
 
   return (

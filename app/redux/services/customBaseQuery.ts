@@ -15,7 +15,7 @@ interface IRefreshResponse {
 }
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://codemap-wgjw.onrender.com/',
+  baseUrl: 'https://codemap-production.up.railway.app/',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;

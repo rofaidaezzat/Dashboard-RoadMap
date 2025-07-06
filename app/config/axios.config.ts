@@ -12,7 +12,7 @@ import { refreshAccessToken } from "../services/authService";
 import Cookies from 'js-cookie';
 
 export const axiosInstance = axios.create({
-    baseURL: "https://codemap-wgjw.onrender.com/", 
+    baseURL: "https://codemap-production.up.railway.app/", 
     withCredentials: true, 
     timeout: 20000, 
 });

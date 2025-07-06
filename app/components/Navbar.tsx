@@ -59,7 +59,7 @@ const Navbar = () => {
           >
             {data?.profile_image ? (
               <Image
-                src={`https://codemap-wgjw.onrender.com/${data.profile_image.replace(
+                src={`https://codemap-production.up.railway.app/${data.profile_image.replace(
                   /\\/g,
                   "/"
                 )}`}

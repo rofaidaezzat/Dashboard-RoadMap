@@ -108,7 +108,7 @@ const DetailsOfMemberComponent = ({ IdUser }: Iprops) => {
         <CardProfile
           imageUrl={
             data.profile_image
-              ? `https://eb90-102-189-197-60.ngrok-free.app/${data.profile_image.replace(
+              ? `https://codemap-production.up.railway.app/${data.profile_image.replace(
                   /\\/g,
                   "/"
                 )}`
